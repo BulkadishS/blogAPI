@@ -1,0 +1,35 @@
+volumes:
+  pg_blog:
+
+services:
+  blog:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=blog
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d blog"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - pg_blog:/var/lib/postgresql
+    ports:
+      - "127.0.0.1:5433:5432"
+  app:
+    restart: always
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      blog:
+        condition: service_healthy
+    environment:
+      - DB_HOST=blog
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_NAME=blog
+      - JAVA_OPTS=Xmx512m -Xms256m
