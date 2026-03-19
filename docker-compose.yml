@@ -28,7 +28,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      - DB_HOST=blog
+      - DB_HOST=postgres
       - DB_USER=postgres
       - DB_PASS=postgres
       - DB_NAME=blog
