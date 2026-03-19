@@ -2,45 +2,54 @@ package com.bulkadishs.blog.service;
 
 // сервис работает с логикой уже
 
-import com.bulkadishs.blog.entity.UserEntity;
-import com.bulkadishs.blog.exception.UserAlreadyExistException;
-import com.bulkadishs.blog.exception.UserNotFoundException;
+import com.bulkadishs.blog.dto.UserDto;
 import com.bulkadishs.blog.model.User;
-import com.bulkadishs.blog.repository.UserRepository;
+import com.bulkadishs.blog.exception.ResourceAlreadyExistException;
+import com.bulkadishs.blog.exception.ResourceNotFoundException;
+import com.bulkadishs.blog.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private UserRepo userRepo;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public UserService(UserRepo userRepository) {
+        this.userRepo = userRepository;
     }
 
-    public UserEntity register(UserEntity user) throws UserAlreadyExistException {
-        if (userRepository.findByUsername(user.getUsername()) != null) {
-            throw new UserAlreadyExistException("user with this name already exists");
+    public UserDto register(User user) {
+        if (userRepo.findByUsername(user.getUsername()) != null) {
+            throw new ResourceAlreadyExistException("User with this name already exists!");
         }
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        return userRepository.save(user);
+        User savedUser = userRepo.save(user);
+        return UserDto.from(savedUser);
     }
 
-    public User getOne(Long id) throws UserNotFoundException {
-        UserEntity user = userRepository.findById(id).get();
-        if (user == null) {
-            throw new UserNotFoundException("user not found");
+    public UserDto getOne(Long id) {
+        User foundUser = userRepo.findById(id);
+
+        if (foundUser == null) {
+            throw new ResourceNotFoundException("User not found with this id: " + id);
         }
-        return User.toModel(user);
+
+        return UserDto.from(foundUser);
     }
 
-    public Long delete(Long id) {
-        userRepository.deleteById(id);
-        return id;
+    public List<UserDto> getAll() {
+        List<User> allUsers = userRepo.findAll();
+        return allUsers.stream()
+                .map(UserDto::from)
+                .toList();
+    }
+
+    public void delete(Long id) {
+        if (userRepo.findById(id) == null) {
+            throw new ResourceNotFoundException("Unable to delete! User with id: " + id + " not found");
+        }
+        userRepo.deleteById(id);
     }
 }

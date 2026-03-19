@@ -2,7 +2,7 @@ volumes:
   pg_blog:
 
 services:
-  blog:
+  postgres:
     image: postgres
     restart: always
     environment:
@@ -25,7 +25,7 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      blog:
+      postgres:
         condition: service_healthy
     environment:
       - DB_HOST=blog
