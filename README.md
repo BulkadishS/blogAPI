@@ -1,4 +1,12 @@
-Контейниризовал, настроил, можешь спокойно запустить с докером
+**Фикс**
+- GET запросы теперь работают на все эндпоинты: /users, /posts, /comments (по айди тоже)
+- Убрана ORM
+- Убрана авторизация
+- Один формат ошибок, с Http статус кодом правильным
+- Правильное название сервиса в docker-compose.yaml
+- Добавлена проверка на наличие существования в бд, при запросе DELETE
+
+**Команды**
 
 **Пользователи:**
 
@@ -8,7 +16,13 @@
 curl -X POST http://localhost:8080/users -H "Content-Type: application/json" -d '{"username":"test","password":"123"}'
 ```
 
-Получить пользователя по айди (имя, посты, комментарии)
+Получить всех пользователей
+
+```bash
+curl -X GET http://localhost:8080/users
+```
+
+Получить пользователя по айди
 ```bash
 curl -X GET http://localhost:8080/users?id=1
 ```
@@ -22,11 +36,23 @@ curl -X DELETE http://localhost:8080/users/1
 **Посты:**
 
 
-Создать пост
-в curl запросе должно стоять помимо существующего уже юзера, его логин и пароль
+
+
+Создать пост (указать айди существующего юзера)
 
 ```bash
-curl -u test:123 -X POST "http://localhost:8080/posts?userId=1" -H "Content-Type: application/json" -d '{"content":"my first example post"}'
+curl -X POST "http://localhost:8080/posts?userId=1" -H "Content-Type: application/json" -d '{"content":"my first example post"}'
+```
+
+Получить все посты
+
+```bash
+curl -X GET http://localhost:8080/posts
+```
+
+Получить пост по айди
+```bash
+curl -X GET http://localhost:8080/posts?id=1
 ```
 
 Удалить пост по айди
@@ -39,12 +65,21 @@ curl -X DELETE http://localhost:8080/posts/1
 
 **Комментарии:**
 
-
-
-Создать комментарий (логин, пароль перед запросом) (Указать айди автора комментария, указать айди поста)
+Создать комментарий (Указать айди поста, указать айди сующествующего автора комментария)
 
 ```bash
-curl -u test:123 -X POST "http://localhost:8080/comments?userId=1&postId=1" -H "Content-Type: application/json" -d '{"content":"my first comment example"}'
+curl -X POST "http://localhost:8080/comments?postId=1&userId=1" -H "Content-Type: application/json" -d '{"content":"my first comment example"}'
+```
+
+Получить все комментарии
+
+```bash
+curl -X GET http://localhost:8080/comments
+```
+
+Получить комментарий по айди
+```bash
+curl -X GET http://localhost:8080/comments?id=1
 ```
 
 Удалить комментарий по айди
