@@ -3,6 +3,7 @@ package com.bulkadishs.blog.controller;
 import com.bulkadishs.blog.dto.UserDto;
 import com.bulkadishs.blog.model.User;
 import com.bulkadishs.blog.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// контроллер работает с запросами и с ответами
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -21,8 +21,9 @@ public class UserController {
         this.userService = userService;
     }
 
+
     @PostMapping
-    public ResponseEntity<UserDto> registration(@RequestBody User user) {
+    public ResponseEntity<UserDto> registration(@Valid @RequestBody User user) {
         UserDto savedUserDto = userService.register(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUserDto);
     }

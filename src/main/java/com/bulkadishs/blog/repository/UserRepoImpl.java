@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -77,10 +78,7 @@ public class UserRepoImpl implements UserRepo {
 
     @Override
     public List<User> findAll() {
-        try {
-            return jdbcTemplate.query(GET_USERS_QUERY, userRowMapper);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        List<User> users = jdbcTemplate.query(GET_USERS_QUERY, userRowMapper);
+        return (users != null) ? users : Collections.emptyList();
     }
 }

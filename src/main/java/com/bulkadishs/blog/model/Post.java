@@ -9,8 +9,6 @@ public class Post {
 
     private User author;
 
-//    private List<Comment> comments;
-
     public Post(Long id, User author, String content, LocalDate createdAt) {
         this.id = id;
         this.author = author;
@@ -19,14 +17,6 @@ public class Post {
     }
 
     public Post() {}
-
-//    public List<Comment> getComments() {
-//        return comments;
-//    }
-//
-//    public void setComments(List<Comment> comments) {
-//        this.comments = comments;
-//    }
 
     public Long getId() {
         return id;

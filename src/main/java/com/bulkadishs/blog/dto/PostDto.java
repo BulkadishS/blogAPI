@@ -11,7 +11,6 @@ public class PostDto {
     private UserDto author;
     private String content;
     private LocalDate createdAt;
-//    private List<CommentDto> comments;
 
     public PostDto(Long id, UserDto author, String content, LocalDate createdAt) {
         this.id = id;
@@ -34,14 +33,6 @@ public class PostDto {
         );
 
     }
-
-//    public List<CommentDto> getComments() {
-//        return comments;
-//    }
-//
-//    public void setComments(List<CommentDto> comments) {
-//        this.comments = comments;
-//    }
 
     public UserDto getAuthor() {
         return author;

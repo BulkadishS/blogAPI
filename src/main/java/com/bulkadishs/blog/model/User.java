@@ -1,14 +1,19 @@
 package com.bulkadishs.blog.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class User {
 
     private Long id;
+    @NotBlank(message = "Username can't be empty")
+    @Size(min = 1, message = "Username length can't be lower than 1")
+    @Size(max = 40, message = "Username length can't be higher than 40")
     private String username;
+    @NotBlank(message = "Password can't be empty")
+    @Size(min = 1, message = "Password length can't be lower than 1")
+    @Size(max = 30, message = "Password length can't be higher than 30")
     private String password;
-
-//    private List<Post> posts;
-//
-//    private List<Comment> comments;
 
     public User(Long id, String username, String password) {
         this.id = id;
@@ -17,22 +22,6 @@ public class User {
     }
 
     public User() {}
-
-//    public List<Post> getPosts() {
-//        return posts;
-//    }
-//
-//    public List<Comment> getComments() {
-//        return comments;
-//    }
-//
-//    public void setComments(List<Comment> comments) {
-//        this.comments = comments;
-//    }
-
-//    public void setPosts(List<Post> posts) {
-//        this.posts = posts;
-//    }
 
     public Long getId() {
         return id;

@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -88,10 +89,7 @@ public class PostRepoImpl implements PostRepo {
 
     @Override
     public List<Post> findAll() {
-        try {
-            return jdbcTemplate.query(GET_POSTS_QUERY, postRowMapper);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        List<Post> posts = jdbcTemplate.query(GET_POSTS_QUERY, postRowMapper);
+        return (posts != null) ? posts : Collections.emptyList();
     }
 }

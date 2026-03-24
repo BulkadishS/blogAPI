@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -96,10 +97,7 @@ public class CommentRepoImpl implements CommentRepo {
 
     @Override
     public List<Comment> findAll() {
-        try {
-            return jdbcTemplate.query(GET_COMMENTS_QUERY, commentRowMapper);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        List<Comment> comments = jdbcTemplate.query(GET_COMMENTS_QUERY, commentRowMapper);
+        return (comments != null) ? comments : Collections.emptyList();
     }
 }

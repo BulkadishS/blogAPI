@@ -41,6 +41,7 @@ public class UserService {
 
     public List<UserDto> getAll() {
         List<User> allUsers = userRepo.findAll();
+        System.out.println("GET: all users: " + allUsers);
         return allUsers.stream()
                 .map(UserDto::from)
                 .toList();
