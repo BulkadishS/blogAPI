@@ -8,6 +8,8 @@ import com.bulkadishs.blog.exception.ResourceAlreadyExistException;
 import com.bulkadishs.blog.exception.ResourceNotFoundException;
 import com.bulkadishs.blog.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,18 +17,32 @@ import java.util.List;
 @Service
 public class UserService {
     private UserRepo userRepo;
+    private PasswordEncoderService passwordEncoderService;
 
     @Autowired
-    public UserService(UserRepo userRepository) {
+    public UserService(UserRepo userRepository, PasswordEncoderService passwordEncoderService) {
         this.userRepo = userRepository;
+        this.passwordEncoderService = passwordEncoderService;
     }
 
     public UserDto register(User user) {
+
+        // чтобы проверить защиту от рейс кондишена, просто закомментируй этот if
         if (userRepo.findByUsername(user.getUsername()) != null) {
             throw new ResourceAlreadyExistException("User with this name already exists!");
         }
-        User savedUser = userRepo.save(user);
-        return UserDto.from(savedUser);
+
+        String hashPassword = passwordEncoderService.encode(user.getPassword());
+        User saveToUser = new User();
+        saveToUser.setUsername(user.getUsername());
+        saveToUser.setPassword(hashPassword);
+
+        try {
+            User savedUser = userRepo.save(saveToUser);
+            return UserDto.from(savedUser);
+        } catch (DuplicateKeyException ex) {
+            throw new ResourceAlreadyExistException("Username is already taken!");
+        }
     }
 
     public UserDto getOne(Long id) {

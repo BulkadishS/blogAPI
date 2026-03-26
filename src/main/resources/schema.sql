@@ -16,8 +16,8 @@ DROP TABLE IF EXISTS public.users CASCADE;
 
 CREATE TABLE public.users (
                               id BIGSERIAL PRIMARY KEY,
-                              username character varying(40) NOT NULL,
-                              password character varying(30) NOT NULL
+                              username character varying(40) NOT NULL UNIQUE,
+                              password character varying(128) NOT NULL
 );
 
 CREATE TABLE public.posts (
