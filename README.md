@@ -15,23 +15,23 @@
 **Пользователи:**
 
 
-Создать юзера
+Создать юзера(ALL)
 ```bash
 curl -X POST http://localhost:8080/users -H "Content-Type: application/json" -d '{"username":"test","password":"123"}'
 ```
 
-Получить всех пользователей
+Получить всех пользователей(ALL)
 
 ```bash
 curl -X GET http://localhost:8080/users
 ```
 
-Получить пользователя по айди
+Получить пользователя по айди(ALL)
 ```bash
 curl -X GET http://localhost:8080/users?id=1
 ```
 
-Удалить пользователя по айди
+Удалить пользователя по айди(ADMIN)
 ```bash
 curl -u "root:123123" -X DELETE http://localhost:8080/users/1
 ```
@@ -42,24 +42,24 @@ curl -u "root:123123" -X DELETE http://localhost:8080/users/1
 
 
 
-Создать пост (указать айди существующего юзера)
+Создать пост (под айди должен быть пользователь с ролью ADMIN)
 
 ```bash
-curl -u "root:123123" -X POST "http://localhost:8080/posts?userId=1" -H "Content-Type: application/json" -d '{"content":"my first example post"}'
+curl -u "root:123123" -X POST "http://localhost:8080/posts?userId=5" -H "Content-Type: application/json" -d '{"content":"my first example post"}'
 ```
 
-Получить все посты
+Получить все посты(ALL)
 
 ```bash
 curl -X GET http://localhost:8080/posts
 ```
 
-Получить пост по айди
+Получить пост по айди(ALL)
 ```bash
 curl -X GET http://localhost:8080/posts?id=1
 ```
 
-Удалить пост по айди
+Удалить пост по айди(ADMIN)
 
 ```bash
 curl -u "root:123123" -X DELETE http://localhost:8080/posts/1
@@ -72,21 +72,21 @@ curl -u "root:123123" -X DELETE http://localhost:8080/posts/1
 Создать комментарий (Указать айди поста, указать айди существующего автора комментария)
 
 ```bash
-curl -u "test:123" -X POST "http://localhost:8080/comments?postId=1&userId=1" -H "Content-Type: application/json" -d '{"content":"my first comment example"}'
+curl -u "test:123" -X POST "http://localhost:8080/comments?postId=1&userId=1" -H "Content-Type: application/json" -d '{"content":"this comment was posted by user"}'
 ```
 
-Получить все комментарии
+Получить все комментарии(ALL)
 
 ```bash
 curl -X GET http://localhost:8080/comments
 ```
 
-Получить комментарий по айди
+Получить комментарий по айди(ALL)
 ```bash
 curl -X GET http://localhost:8080/comments?id=1
 ```
 
-Удалить комментарий по айди
+Удалить комментарий по айди(ADMIN)
 
 ```bash
 curl -u "root:123123" -X DELETE http://localhost:8080/comments/1
