@@ -33,7 +33,7 @@ curl -X GET http://localhost:8080/users?id=1
 
 Удалить пользователя по айди
 ```bash
-curl -X DELETE http://localhost:8080/users/1
+curl -u "root:123123" -X DELETE http://localhost:8080/users/1
 ```
 
 
