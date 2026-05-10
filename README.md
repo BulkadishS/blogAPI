@@ -1,29 +1,55 @@
-**Фикс**
-- Добавил хеширование паролей через BCrypt
-- Почистил код, комменты, перенес SQL query в локальные переменные
-- Добавил в schema.sql на колонке username констранту UNIQUE, чтобы не было race condition'а
+**Обновление**
+- Добавил Security, подстроил обработку ошибок с ним, и таблицу ролей, связанную с юзерами в том числе
+- Попробовал транзакции, с JDBC Template сделал с чистым sql, пока сыро, но на примере есть. Ничего не поменялось толком, в коде лишь видно
+- Сделал data.sql, которая создает админа при старте апишки. Айди админа всегда 5. С ним можешь уже проверить привелегии его
+
+***Аутентификация/Авторизация***
+- Настроил привелегии
+- Неавторизованные юзеры - только просмотр (GET)
+- Юзер - просмотр + создание комментариев
+- Админ - полный доступ(создание постов, комментариев, удаление)
+
 
 **Команды**
 
 **Пользователи:**
 
 
-Создать юзера
+Создать юзера(ALL)
 ```bash
 curl -X POST http://localhost:8080/users -H "Content-Type: application/json" -d '{"username":"test","password":"123"}'
 ```
 
-Получить всех пользователей
+Получить всех пользователей(ALL)
 
 ```bash
 curl -X GET http://localhost:8080/users
 ```
 
+Получить пользователя по айди(ALL)
 Получить пользователя по айди
 ```bash
 curl -X GET http://localhost:8080/users?id=1
 ```
 
+Удалить пользователя по айди(ADMIN)
+```bash
+curl -u "root:123123" -X DELETE http://localhost:8080/users/1
+```
+
+
+**Посты:**
+
+
+
+
+Создать пост (под айди должен быть пользователь с ролью ADMIN)
+
+```bash
+curl -u "root:123123" -X POST "http://localhost:8080/posts?userId=5" -H "Content-Type: application/json" -d '{"content":"my first example post"}'
+```
+
+Получить все посты(ALL)
 Удалить пользователя по айди
 ```bash
 curl -X DELETE http://localhost:8080/users/1
@@ -47,11 +73,29 @@ curl -X POST "http://localhost:8080/posts?userId=1" -H "Content-Type: applicatio
 curl -X GET http://localhost:8080/posts
 ```
 
+Получить пост по айди(ALL)
 Получить пост по айди
 ```bash
 curl -X GET http://localhost:8080/posts?id=1
 ```
 
+Удалить пост по айди(ADMIN)
+
+```bash
+curl -u "root:123123" -X DELETE http://localhost:8080/posts/1
+```
+
+
+
+**Комментарии:**
+
+Создать комментарий (Указать айди поста, указать айди существующего автора комментария)
+
+```bash
+curl -u "test:123" -X POST "http://localhost:8080/comments?postId=1&userId=1" -H "Content-Type: application/json" -d '{"content":"this comment was posted by user"}'
+```
+
+Получить все комментарии(ALL)
 Удалить пост по айди
 
 ```bash
@@ -74,6 +118,7 @@ curl -X POST "http://localhost:8080/comments?postId=1&userId=1" -H "Content-Type
 curl -X GET http://localhost:8080/comments
 ```
 
+Получить комментарий по айди(ALL)
 Получить комментарий по айди
 ```bash
 curl -X GET http://localhost:8080/comments?id=1

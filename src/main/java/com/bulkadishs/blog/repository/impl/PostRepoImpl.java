@@ -1,7 +1,8 @@
-package com.bulkadishs.blog.repository;
+package com.bulkadishs.blog.repository.impl;
 
 import com.bulkadishs.blog.model.Post;
 import com.bulkadishs.blog.model.User;
+import com.bulkadishs.blog.repository.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

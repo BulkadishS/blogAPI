@@ -12,7 +12,8 @@ SET row_security = off;
 DROP TABLE IF EXISTS public.comments CASCADE;
 DROP TABLE IF EXISTS public.posts CASCADE;
 DROP TABLE IF EXISTS public.users CASCADE;
-
+DROP TABLE IF EXISTS public.roles CASCADE;
+DROP TABLE IF EXISTS public.user_roles CASCADE;
 
 CREATE TABLE public.users (
                               id BIGSERIAL PRIMARY KEY,
@@ -33,4 +34,17 @@ CREATE TABLE public.comments (
                                  post_id integer NOT NULL REFERENCES public.posts(id) ON DELETE CASCADE,
                                  content character varying(255) NOT NULL,
                                  created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE public.roles (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE public.user_roles (
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
